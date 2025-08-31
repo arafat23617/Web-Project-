@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitLife Bangladesh - Gym Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #006400, #228B22, #32CD32);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #006400;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav button {
+            background: #006400;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .nav button:hover {
+            background: #004d00;
+        }
+        
+        .nav button.active {
+            background: #FF6347;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info button {
+            background: #FF6347;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        h1, h2 {
+            color: #006400;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            background: #FF6347;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #e5533b;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            color: #006400;
+            margin-bottom: 15px;
+        }
+        
+        .class-schedule {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .trainer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .trainer-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+        }
+        
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .attendance-table th, .attendance-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .attendance-table th {
+            background: #006400;
+            color: white;
+        }
+        
+        .attendance-table tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        
+        .payment-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .course-catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .course-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .course-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .course-card-content {
+            padding: 20px;
+        }
+        
+        .course-card h3 {
+            color: #006400;
+            margin-bottom: 10px;
+        }
+        
+        .course-card p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .course-card .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF6347;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .notification.error {
+            background: #f44336;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .payment-method {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            border-color: #FF6347;
+            background: #fff5f2;
+        }
+        
+        .payment-method.selected {
+            border-color: #FF6347;
+            background: #FF6347;
+            color: white;
+        }
+        
+        .payment-method-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .class-schedule, .trainer-grid, .course-catalog {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/1200px-Flag_of_Bangladesh.svg.png" alt="Bangladesh Flag">
+                FitLife Bangladesh
+            </div>
+            <div class="nav">
+                <button class="nav-btn active" data-section="home">Home</button>
+                <button class="nav-btn" data-section="register">Register</button>
+                <button class="nav-btn" data-section="login">Login</button>
+                <button class="nav-btn" data-section="classes">Classes</button>
+                <button class="nav-btn" data-section="trainers">Trainers</button>
+                <button class="nav-btn" data-section="attendance">Attendance</button>
+                <button class="nav-btn" data-section="payments">Payments</button>
+                <button class="nav-btn" data-section="courses">Courses</button>
+            </div>
+            <div class="user-info">
+                <span id="user-display">Guest</span>
+                <button id="logout-btn" style="display: none;">Logout</button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <!-- Home Section -->
+            <div id="home" class="section active">
+                <h1>Welcome to FitLife Bangladesh</h1>
+                <div class="card">
+                    <h2>About Our Gym</h2>
+                    <p>FitLife Bangladesh offers state-of-the-art equipment, professional trainers, and a variety of fitness classes to help you achieve your health goals. Our management system allows you to register for classes, track your attendance, manage payments, and explore our course offerings all in one place.</p>
+                    <p>We're proud to serve fitness enthusiasts across Bangladesh with locations in Dhaka, Chittagong, Sylhet, and Khulna.</p>
+                </div>
+                <div class="card">
+                    <h2>Our Features</h2>
+                    <ul style="line-height: 1.8;">
+                        <li>Easy online registration and login</li>
+                        <li>Comprehensive class schedules with filtering options</li>
+                        <li>Professional Bangladeshi trainer profiles and specialties</li>
+                        <li>Digital attendance tracking system</li>
+                        <li>Secure payment processing in Bangladeshi Taka (BDT)</li>
+                        <li>Diverse course catalog with detailed descriptions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Registration Section -->
+            <div id="register" class="section">
+                <h1>Create Your Account</h1>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-name">Full Name</label>
+                        <input type="text" id="reg-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" placeholder="01XXXXXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-nid">National ID Number</label>
+                        <input type="text" id="reg-nid">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-membership">Membership Type</label>
+                        <select id="reg-membership">
+                            <option value="basic">Basic - ৳1,500/month</option>
+                            <option value="premium">Premium - ৳3,000/month</option>
+                            <option value="vip">VIP - ৳5,000/month</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-location">Preferred Location</label>
+                        <select id="reg-location">
+                            <option value="dhaka">Dhaka</option>
+                            <option value="chittagong">Chittagong</option>
+                            <option value="sylhet">Sylhet</option>
+                            <option value="khulna">Khulna</option>
+                        </select>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+            
+            <!-- Login Section -->
+            <div id="login" class="section">
+                <h1>Login to Your Account</h1>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            
+            <!-- Classes Section -->
+            <div id="classes" class="section">
+                <h1>Class Schedule</h1>
+                <div class="form-group">
+                    <label for="class-filter">Filter by Class Type:</label>
+                    <select id="class-filter">
+                        <option value="all">All Classes</option>
+                        <option value="yoga">Yoga</option>
+                        <option value="cardio">Cardio</option>
+                        <option value="strength">Strength Training</option>
+                        <option value="boxing">Boxing</option>
+                        <option value="zumba">Zumba</option>
+                        <option value="bengali">Bengali Traditional</option>
+                    </select>
+                </div>
+                <div class="class-schedule" id="class-container">
+                    <!-- Classes will be dynamically loaded here -->
+                </div>
+            </div>
+            
+            <!-- Trainers Section -->
+            <div id="trainers" class="section">
+                <h1>Our Trainers</h1>
+                <div class="trainer-grid" id="trainer-container">
+                    <!-- Trainers will be dynamically loaded here -->
+                </div>
+            </div>
+            
+            <!-- Attendance Section -->
+            <div id="attendance" class="section">
+                <h1>Attendance Tracking</h1>
+                <div id="attendance-content">
+                    <p>Please login to view your attendance records.</p>
+                </div>
+            </div>
+            
+            <!-- Payments Section -->
+            <div id="payments" class="section">
+                <h1>Payment Portal</h1>
+                <div id="payment-content">
+                    <p>Please login to make payments.</p>
+                </div>
+            </div>
+            
+            <!-- Courses Section -->
+            <div id="courses" class="section">
+                <h1>Course Catalog</h1>
+                <div class="course-catalog" id="course-container">
+                    <!-- Courses will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Sample data - Bangladeshi context
+        const trainers = [
+            { id: 1, name: "Rahim Khan", specialty: "Strength Training", experience: "8 years", location: "Dhaka" },
+            { id: 2, name: "Fatema Akter", specialty: "Yoga & Pilates", experience: "6 years", location: "Chittagong" },
+            { id: 3, name: "Mohammed Hassan", specialty: "Cardio & HIIT", experience: "10 years", location: "Sylhet" },
+            { id: 4, name: "Ayesha Siddiqua", specialty: "Boxing & Martial Arts", experience: "7 years", location: "Khulna" },
+            { id: 5, name: "Jamal Uddin", specialty: "Nutrition & Weight Loss", experience: "5 years", location: "Dhaka" },
+            { id: 6, name: "Shamima Akhter", specialty: "Zumba & Dance", experience: "9 years", location: "Chittagong" }
+        ];
+        
+        const classes = [
+            { id: 1, name: "Morning Yoga", type: "yoga", time: "Mon, Wed, Fri 7:00 AM", trainer: "Fatema Akter", duration: "60 mins", capacity: 20, enrolled: 15, location: "Dhaka" },
+            { id: 2, name: "HIIT Blast", type: "cardio", time: "Tue, Thu 6:30 PM", trainer: "Mohammed Hassan", duration: "45 mins", capacity: 15, enrolled: 12, location: "Chittagong" },
+            { id: 3, name: "Strength Building", type: "strength", time: "Mon, Wed, Fri 5:30 PM", trainer: "Rahim Khan", duration: "60 mins", capacity: 12, enrolled: 10, location: "Sylhet" },
+            { id: 4, name: "Boxing Fundamentals", type: "boxing", time: "Tue, Thu 7:30 PM", trainer: "Ayesha Siddiqua", duration: "60 mins", capacity: 10, enrolled: 8, location: "Khulna" },
+            { id: 5, name: "Zumba Party", type: "zumba", time: "Sat 10:00 AM", trainer: "Shamima Akhter", duration: "60 mins", capacity: 25, enrolled: 20, location: "Dhaka" },
+            { id: 6, name: "Power Yoga", type: "yoga", time: "Sun 9:00 AM", trainer: "Fatema Akter", duration: "75 mins", capacity: 15, enrolled: 12, location: "Chittagong" },
+            { id: 7, name: "Boli Khela Training", type: "bengali", time: "Sat 4:00 PM", trainer: "Rahim Khan", duration: "90 mins", capacity: 15, enrolled: 10, location: "Sylhet" },
+            { id: 8, name: "Lathi Khela Workshop", type: "bengali", time: "Sun 3:00 PM", trainer: "Mohammed Hassan", duration: "60 mins", capacity: 20, enrolled: 15, location: "Khulna" }
+        ];
+        
+        const courses = [
+            { id: 1, name: "Yoga Teacher Training", description: "Comprehensive 200-hour yoga teacher certification program", duration: "8 weeks", price: "৳12,000", image: "https://images.unsplash.com/photo-1506629904297-1b0b0b6b6b6b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+            { id: 2, name: "Nutrition Coaching", description: "Learn the fundamentals of nutrition and meal planning", duration: "4 weeks", price: "৳8,000", image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+            { id: 3, name: "Strength & Conditioning", description: "Advanced techniques for strength and athletic performance", duration: "6 weeks", price: "৳10,000", image: "https://images.unsplash.com/photo-1534367507874-8a2b96dcaa75?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+            { id: 4, name: "Boxing Bootcamp", description: "Intensive boxing training for all skill levels", duration: "4 weeks", price: "৳9,000", image: "https://images.unsplash.com/photo-1549576490-b0b4871ef60a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+            { id: 5, name: "Traditional Bangladeshi Martial Arts", description: "Learn traditional Bangladeshi martial arts like Lathi Khela", duration: "8 weeks", price: "৳7,000", image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+            { id: 6, name: "Boli Khela Championship Training", description: "Specialized training for Bangladesh's traditional wrestling", duration: "12 weeks", price: "৳15,000", image: "https://images.unsplash.com/photo-1549576490-b0b4871ef60a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+        ];
+        
+        // DOM elements
+        const sections = document.querySelectorAll('.section');
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const registerForm = document.getElementById('register-form');
+        const loginForm = document.getElementById('login-form');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userDisplay = document.getElementById('user-display');
+        const notification = document.getElementById('notification');
+        const classFilter = document.getElementById('class-filter');
+        const classContainer = document.getElementById('class-container');
+        const trainerContainer = document.getElementById('trainer-container');
+        const courseContainer = document.getElementById('course-container');
+        const attendanceContent = document.getElementById('attendance-content');
+        const paymentContent = document.getElementById('payment-content');
+        
+        // Initialize app
+        let currentUser = null;
+        
+        // Check if user is logged in
+        function checkAuth() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                currentUser = JSON.parse(user);
+                userDisplay.textContent = currentUser.name;
+                logoutBtn.style.display = 'block';
+                updateAttendanceSection();
+                updatePaymentSection();
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, isError = false) {
+            notification.textContent = message;
+            notification.className = isError ? 'notification error' : 'notification';
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Navigation
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const sectionId = btn.getAttribute('data-section');
+                navBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) section.classList.add('active');
+                });
+                if (sectionId === 'classes') loadClasses();
+                else if (sectionId === 'trainers') loadTrainers();
+                else if (sectionId === 'courses') loadCourses();
+            });
+        });
+        
+        // Registration
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const phone = document.getElementById('reg-phone').value;
+            const nid = document.getElementById('reg-nid').value;
+            const membership = document.getElementById('reg-membership').value;
+            const location = document.getElementById('reg-location').value;
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(user => user.email === email)) {
+                showNotification('User with this email already exists!', true);
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now(),
+                name, email, password, phone, nid, membership, location,
+                registeredAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            showNotification('Registration successful! Please login.');
+            registerForm.reset();
+            document.querySelector('[data-section="login"]').click();
+        });
+        
+        // Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                userDisplay.textContent = user.name;
+                logoutBtn.style.display = 'block';
+                showNotification(`Welcome back, ${user.name}!`);
+                loginForm.reset();
+                updateAttendanceSection();
+                updatePaymentSection();
+                document.querySelector('[data-section="home"]').click();
+            } else {
+                showNotification('Invalid email or password!', true);
+            }
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            userDisplay.textContent = 'Guest';
+            logoutBtn.style.display = 'none';
+            showNotification('You have been logged out.');
+            attendanceContent.innerHTML = '<p>Please login to view your attendance records.</p>';
+            paymentContent.innerHTML = '<p>Please login to make payments.</p>';
+            document.querySelector('[data-section="home"]').click();
+        });
+        
+        // Load classes
+        function loadClasses() {
+            const filter = classFilter.value;
+            const filteredClasses = filter === 'all' 
+                ? classes 
+                : classes.filter(c => c.type === filter);
+            
+            classContainer.innerHTML = '';
+            filteredClasses.forEach(cls => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${cls.name}</h3>
+                    <p><strong>Type:</strong> ${cls.type.charAt(0).toUpperCase() + cls.type.slice(1)}</p>
+                    <p><strong>Time:</strong> ${cls.time}</p>
+                    <p><strong>Trainer:</strong> ${cls.trainer}</p>
+                    <p><strong>Duration:</strong> ${cls.duration}</p>
+                    <p><strong>Location:</strong> ${cls.location}</p>
+                    <p><strong>Capacity:</strong> ${cls.enrolled}/${cls.capacity}</p>
+                    <button ${cls.enrolled >= cls.capacity ? 'disabled' : ''} onclick="enrollClass(${cls.id})">
+                        ${cls.enrolled >= cls.capacity ? 'Class Full' : 'Enroll Now'}
+                    </button>
+                `;
+                classContainer.appendChild(card);
+            });
+        }
+        
+        // Enroll in class
+        function enrollClass(classId) {
+            if (!currentUser) {
+                showNotification('Please login to enroll in classes!', true);
+                document.querySelector('[data-section="login"]').click();
+                return;
+            }
+            
+            const cls = classes.find(c => c.id === classId);
+            if (cls && cls.enrolled < cls.capacity) {
+                cls.enrolled++;
+                const enrollments = JSON.parse(localStorage.getItem('enrollments') || '[]');
+                enrollments.push({
+                    userId: currentUser.id,
+                    classId,
+                    enrolledAt: new Date().toISOString()
+                });
+                localStorage.setItem('enrollments', JSON.stringify(enrollments));
+                showNotification(`Successfully enrolled in ${cls.name}!`);
+                loadClasses();
+            }
+        }
+        
+        // Load trainers
+        function loadTrainers() {
+            trainerContainer.innerHTML = '';
+            trainers.forEach(trainer => {
+                const card = document.createElement('div');
+                card.className = 'trainer-card';
+                card.innerHTML = `
+                    <h3>${trainer.name}</h3>
+                    <p><strong>Specialty:</strong> ${trainer.specialty}</p>
+                    <p><strong>Experience:</strong> ${trainer.experience}</p>
+                    <p><strong>Location:</strong> ${trainer.location}</p>
+                    <button onclick="bookTrainer(${trainer.id})">Book Session</button>
+                `;
+                trainerContainer.appendChild(card);
+            });
+        }
+        
+        // Book trainer
+        function bookTrainer(trainerId) {
+            if (!currentUser) {
+                showNotification('Please login to book trainers!', true);
+                document.querySelector('[data-section="login"]').click();
+                return;
+            }
+            const trainer = trainers.find(t => t.id === trainerId);
+            showNotification(`Booking request sent to ${trainer.name}!`);
+        }
+        
+        // Update attendance section
+        function updateAttendanceSection() {
+            if (!currentUser) return;
+            
+            attendanceContent.innerHTML = `
+                <h2>Your Attendance Records</h2>
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Class</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2023-05-15</td>
+                            <td>Morning Yoga</td>
+                            <td>7:00 AM - 8:00 AM</td>
+                            <td>Present</td>
+                        </tr>
+                        <tr>
+                            <td>2023-05-16</td>
+                            <td>HIIT Blast</td>
+                            <td>6:30 PM - 7:15 PM</td>
+                            <td>Present</td>
+                        </tr>
+                        <tr>
+                            <td>2023-05-18</td>
+                            <td>Strength Building</td>
+                            <td>5:30 PM - 6:30 PM</td>
+                            <td>Absent</td>
+                        </tr>
+                        <tr>
+                            <td>2023-05-20</td>
+                            <td>Zumba Party</td>
+                            <td>10:00 AM - 11:00 AM</td>
+                            <td>Present</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px;">
+                    <button onclick="markAttendance()">Mark Today's Attendance</button>
+                </div>
+            `;
+        }
+        
+        // Mark attendance
+        function markAttendance() {
+            showNotification('Attendance marked successfully!');
+        }
+        
+        // Update payment section
+        function updatePaymentSection() {
+            if (!currentUser) return;
+            
+            paymentContent.innerHTML = `
+                <h2>Payment Portal</h2>
+                <div class="payment-form">
+                    <form id="payment-form">
+                        <div class="form-group">
+                            <label for="payment-amount">Amount (BDT)</label>
+                            <select id="payment-amount">
+                                <option value="500">৳500</option>
+                                <option value="1000">৳1,000</option>
+                                <option value="2000">৳2,000</option>
+                                <option value="5000">৳5,000</option>
+                                <option value="10000">৳10,000</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Payment Method</label>
+                            <div class="payment-methods">
+                                <div class="payment-method" data-method="bkash">
+                                    <div class="payment-method-icon">💳</div>
+                                    <div>bKash</div>
+                                </div>
+                                <div class="payment-method" data-method="nagad">
+                                    <div class="payment-method-icon">💳</div>
+                                    <div>Nagad</div>
+                                </div>
+                                <div class="payment-method" data-method="rocket">
+                                    <div class="payment-method-icon">🚀</div>
+                                    <div>Rocket</div>
+                                </div>
+                                <div class="payment-method" data-method="upay">
+                                    <div class="payment-method-icon">💳</div>
+                                    <div>Upay</div>
+                                </div>
+                                <div class="payment-method" data-method="bank">
+                                    <div class="payment-method-icon">🏦</div>
+                                    <div>Bank</div>
+                                </div>
+                                <div class="payment-method" data-method="cash">
+                                    <div class="payment-method-icon">💵</div>
+                                    <div>Cash</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="mobile-number-group">
+                            <label for="mobile-number">Mobile Number</label>
+                            <input type="text" id="mobile-number" placeholder="01XXXXXXXXX">
+                        </div>
+                        
+                        <div class="form-group" id="bank-details-group" style="display: none;">
+                            <label for="bank-name">Bank Name</label>
+                            <select id="bank-name">
+                                <option value="dbbl">Dutch-Bangla Bank</option>
+                                <option value="brac">BRAC Bank</option>
+                                <option value="pubali">Pubali Bank</option>
+                                <option value="ucb">United Commercial Bank</option>
+                                <option value="sonali">Sonali Bank</option>
+                            </select>
+                            <label for="account-number" style="margin-top: 10px;">Account Number</label>
+                            <input type="text" id="account-number" placeholder="Enter your account number">
+                        </div>
+                        
+                        <button type="submit">Process Payment</button>
+                    </form>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Payment History</h3>
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2023-05-01</td>
+                            <td>Monthly Membership</td>
+                            <td>৳3,000</td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>2023-04-01</td>
+                            <td>Monthly Membership</td>
+                            <td>৳3,000</td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>2023-03-15</td>
+                            <td>Personal Training Session</td>
+                            <td>৳2,000</td>
+                            <td>Completed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            
+            // Payment method selection
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            const mobileGroup = document.getElementById('mobile-number-group');
+            const bankGroup = document.getElementById('bank-details-group');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', () => {
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    method.classList.add('selected');
+                    
+                    const methodType = method.getAttribute('data-method');
+                    if (methodType === 'bkash' || methodType === 'nagad' || methodType === 'rocket' || methodType === 'upay') {
+                        mobileGroup.style.display = 'block';
+                        bankGroup.style.display = 'none';
+                    } else if (methodType === 'bank') {
+                        mobileGroup.style.display = 'none';
+                        bankGroup.style.display = 'block';
+                    } else {
+                        mobileGroup.style.display = 'none';
+                        bankGroup.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Add payment form submission
+            document.getElementById('payment-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const amount = document.getElementById('payment-amount').value;
+                showNotification(`Payment of ৳${amount} processed successfully!`);
+                document.getElementById('payment-form').reset();
+                paymentMethods.forEach(m => m.classList.remove('selected'));
+            });
+        }
+        
+        // Load courses
+        function loadCourses() {
+            courseContainer.innerHTML = '';
+            courses.forEach(course => {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.innerHTML = `
+                    <img src="${course.image}" alt="${course.name}">
+                    <div class="course-card-content">
+                        <h3>${course.name}</h3>
+                        <p>${course.description}</p>
+                        <p><strong>Duration:</strong> ${course.duration}</p>
+                        <div class="price">${course.price}</div>
+                        <button onclick="enrollCourse(${course.id})">Enroll Now</button>
+                    </div>
+                `;
+                courseContainer.appendChild(card);
+            });
+        }
+        
+        // Enroll in course
+        function enrollCourse(courseId) {
+            if (!currentUser) {
+                showNotification('Please login to enroll in courses!', true);
+                document.querySelector('[data-section="login"]').click();
+                return;
+            }
+            const course = courses.find(c => c.id === courseId);
+            showNotification(`Successfully enrolled in ${course.name}!`);
+        }
+        
+        // Class filter
+        classFilter.addEventListener('change', loadClasses);
+        
+        // Initialize app
+        checkAuth();
+        loadClasses();
+        loadTrainers();
+        loadCourses();
+    </script>
+</body>
+</html>
